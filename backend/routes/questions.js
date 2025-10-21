@@ -47,4 +47,15 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// GET all unique categories (for dropdown)
+router.get('/categories', async (req, res) => {
+  try {
+    const categories = await Question.distinct("category"); // use "category" or "subject" depending on schema
+    res.json(categories);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 module.exports = router;

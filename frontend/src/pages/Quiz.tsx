@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Trophy, RotateCcw } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import axios from 'axios';
 
 interface Question {
   id: string;
@@ -37,37 +38,53 @@ const Quiz = () => {
 
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
 
-  useEffect(() => {
-    if (!subject || !difficulty) {
-      navigate("/user-select");
-      return;
-    }
+  // Utility for shuffling array
+function shuffleArray<T>(array: T[]): T[] {
+  return array
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
 
-    const stored = localStorage.getItem("quizQuestions");
-    if (stored) {
-      const allQuestions: Question[] = JSON.parse(stored);
-      const filtered = allQuestions.filter(
-        (q) => q.subject === subject && q.difficulty === difficulty
-      );
+useEffect(() => {
+  if (!subject || !difficulty) {
+    navigate("/user-select");
+    return;
+  }
 
-      // Shuffle questions and options
-      const shuffled = filtered.map((q) => {
-        const optionsWithIndex = q.options.map((opt, idx) => ({ opt, idx }));
-        const shuffledOptions = optionsWithIndex.sort(() => Math.random() - 0.5);
+  axios
+    .get(`http://localhost:5000/api/questions?category=${subject}&difficulty=${difficulty}`
+    )
+    .then((res) => {
+      const shuffledQuestions = shuffleArray(res.data).map((q: any) => {
+        // Fix: create typed option objects
+        type OptionObj = { opt: string; idx: number };
+        const optionObjects: OptionObj[] = q.options.map((opt: string, idx: number) => ({ opt, idx }));
+        const shuffledOptions: OptionObj[] = shuffleArray(optionObjects);
         const newCorrectAnswer = shuffledOptions.findIndex(
           (item) => item.idx === q.correctAnswer
         );
 
         return {
-          ...q,
+          id: q._id,
+          subject: q.category,
+          difficulty: q.difficulty,
+          question: q.question,
           options: shuffledOptions.map((item) => item.opt),
           correctAnswer: newCorrectAnswer,
         };
-      }).sort(() => Math.random() - 0.5);
+      });
 
-      setQuizState((prev) => ({ ...prev, questions: shuffled }));
-    }
-  }, [subject, difficulty, navigate]);
+      setQuizState((prev) => ({
+        ...prev,
+        questions: shuffledQuestions,
+      }));
+    })
+    .catch((err) => {
+      console.error("Failed to fetch questions:", err);
+      setQuizState((prev) => ({ ...prev, questions: [] }));
+    });
+}, [subject, difficulty, navigate]);
 
   const handleAnswerSelect = (optionIndex: number) => {
     setSelectedOption(optionIndex);

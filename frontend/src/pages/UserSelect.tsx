@@ -5,6 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ArrowLeft, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const UserSelect = () => {
   const navigate = useNavigate();
@@ -13,13 +14,12 @@ const UserSelect = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
 
   useEffect(() => {
-    const stored = localStorage.getItem("quizQuestions");
-    if (stored) {
-      const questions = JSON.parse(stored);
-      const uniqueSubjects = Array.from(new Set(questions.map((q: any) => q.subject)));
-      setSubjects(uniqueSubjects as string[]);
-    }
-  }, []);
+  axios.get("http://localhost:5000/api/questions/categories")
+    .then(res => setSubjects(res.data))
+    .catch(err => console.error("Failed to fetch subjects:", err));
+}, []);
+
+
 
   const handleStartQuiz = () => {
     if (!selectedSubject || !selectedDifficulty) return;

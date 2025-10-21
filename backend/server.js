@@ -24,7 +24,6 @@ mongoose.connection.on('connected', () => {
   console.log('MongoDB is connected');
 });
 
-app.use('/api/questions', questionRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
