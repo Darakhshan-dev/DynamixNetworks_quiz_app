@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const questionRoutes = require('./routes/questions');
+const aiRoutes = require('./routes/gemini');
 
 const app = express();
 app.use(express.json());
@@ -10,6 +11,8 @@ const cors = require('cors');
 app.use(cors());
 
 app.use('/api/questions', questionRoutes);
+app.use('/api/ai', aiRoutes);
+
 
 
 app.get('/', (req, res) => {

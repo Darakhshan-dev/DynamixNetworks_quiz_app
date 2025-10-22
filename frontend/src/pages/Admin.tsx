@@ -57,6 +57,37 @@ const Admin = () => {
   }
 };
 
+const [aiPrompt, setAiPrompt] = useState("");         // for custom Gemini prompt (optional)
+const [aiNumQuestions, setAiNumQuestions] = useState(5); // for number of AI questions to generate
+const [aiLoading, setAiLoading] = useState(false);    // for loading spinner
+const handleGenerate = async () => {
+  setAiLoading(true);
+  try {
+    const res = await axios.post("http://localhost:5000/api/ai/generate", {
+      subject: formData.category,
+      difficulty: formData.difficulty,
+      numQuestions: aiNumQuestions,
+      prompt: aiPrompt
+    });
+
+    // If response is a JSON array:
+    const generatedQuestions = Array.isArray(res.data) ? res.data : JSON.parse(res.data);
+    setQuestions([...questions, ...generatedQuestions]);
+
+    toast({
+      title: "AI Questions Added",
+      description: "Questions generated and added to the question bank.",
+    });
+  } catch (err) {
+    toast({
+      title: "AI Generation Error",
+      description: "Failed to generate AI questions",
+      variant: "destructive",
+    });
+  }
+  setAiLoading(false);
+};
+
 
   const handleAddQuestion = async () => {
   if (!formData.category || !formData.question || formData.options.some(opt => !opt)) {
@@ -223,12 +254,37 @@ const Admin = () => {
                   <Plus className="h-4 w-4 mr-2" />
                   Add Question
                 </Button>
-                <Button variant="outline" className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4" />
-                  AI Generate
-                </Button>
               </div>
+              
             </div>
+            <div className="mt-6 space-y-2">
+  <Label>AI Question Prompt (optional)</Label>
+  <Textarea
+    placeholder="Custom Gemini prompt for AI generation"
+    value={aiPrompt}
+    onChange={e => setAiPrompt(e.target.value)}
+    rows={2}
+  />
+  <Label>Number of AI Questions</Label>
+  <Input
+    type="number"
+    min={1}
+    max={20}
+    value={aiNumQuestions}
+    onChange={e => setAiNumQuestions(Number(e.target.value))}
+  />
+  <Button
+    variant="outline"
+    className="flex items-center gap-2"
+    onClick={handleGenerate}
+    disabled={aiLoading}
+  >
+    <Sparkles className="h-4 w-4" />
+    {aiLoading ? "Generating..." : "AI Generate"}
+  </Button>
+</div>
+
+            
           </Card>
 
           <Card className="p-6 shadow-lg">
