@@ -29,7 +29,7 @@ const Index = () => {
               </div>
               <h2 className="text-3xl font-bold">Admin Panel</h2>
               <p className="text-muted-foreground">
-                Create and manage quiz questions with AI assistance
+                Create and manage quiz questions with AI assistance and manually
               </p>
               <div className="flex flex-wrap gap-2 justify-center pt-4">
                 <span className="text-xs px-3 py-1 rounded-full bg-primary/10 text-primary font-medium">

@@ -14,7 +14,7 @@ import AddQuestion from '../components/AddQuestion';
 import QuestionList from '../components/QuestionList';
 
 interface Question {
-  id: string;
+  _id: string;
   category: string;
   difficulty: "easy" | "medium" | "hard";
   question: string;
@@ -60,6 +60,9 @@ const Admin = () => {
 const [aiPrompt, setAiPrompt] = useState("");         // for custom Gemini prompt (optional)
 const [aiNumQuestions, setAiNumQuestions] = useState(5); // for number of AI questions to generate
 const [aiLoading, setAiLoading] = useState(false);    // for loading spinner
+const [generatedQuestions, setGeneratedQuestions] = useState<Question[]>([]);
+
+
 const handleGenerate = async () => {
   setAiLoading(true);
   try {
@@ -67,17 +70,24 @@ const handleGenerate = async () => {
       subject: formData.category,
       difficulty: formData.difficulty,
       numQuestions: aiNumQuestions,
-      prompt: aiPrompt
+      prompt: aiPrompt,
     });
 
-    // If response is a JSON array:
-    const generatedQuestions = Array.isArray(res.data) ? res.data : JSON.parse(res.data);
-    setQuestions([...questions, ...generatedQuestions]);
+    // Ensure data comes as array
+    const generated = Array.isArray(res.data)
+      ? res.data
+      : JSON.parse(res.data);
 
+    setGeneratedQuestions(generated);
+    
     toast({
-      title: "AI Questions Added",
-      description: "Questions generated and added to the question bank.",
+      title: "AI Questions Generated",
+      description: "Now reviewing questions before adding them to the database.",
     });
+
+    // Redirect to Review Page with generated questions
+    navigate("/admin/ai-review", { state: { questions: generated, prompt: aiPrompt } });
+
   } catch (err) {
     toast({
       title: "AI Generation Error",
@@ -87,6 +97,7 @@ const handleGenerate = async () => {
   }
   setAiLoading(false);
 };
+
 
 
   const handleAddQuestion = async () => {
@@ -139,8 +150,10 @@ const handleGenerate = async () => {
 };
 
  const handleDeleteQuestion = async (id: string) => {
+   console.log('Deleting question with id:', id);
   try {
     await axios.delete(`http://localhost:5000/api/questions/${id}`);
+
     toast({
       title: "Question deleted",
       description: "Question removed from database",
@@ -289,14 +302,14 @@ const handleGenerate = async () => {
 
           <Card className="p-6 shadow-lg">
             <h2 className="text-2xl font-bold mb-6">Question Bank</h2>
-            <div className="space-y-3 max-h-[600px] overflow-y-auto">
+            <div className="space-y-3 max-h-[800px] overflow-y-auto">
               {questions.length === 0 ? (
                 <p className="text-muted-foreground text-center py-8">
                   No questions yet. Add your first question!
                 </p>
               ) : (
                 questions.map((q) => (
-                  <Card key={q.id} className="p-4 hover:shadow-md transition-shadow">
+                  <Card key={q._id} className="p-4 hover:shadow-md transition-shadow">
                     <div className="flex justify-between items-start gap-4">
                       <div className="flex-1">
                         <div className="flex gap-2 mb-2">
@@ -319,7 +332,7 @@ const handleGenerate = async () => {
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => handleDeleteQuestion(q.id)}
+                        onClick={() => handleDeleteQuestion(q._id)}
                         className="text-destructive hover:text-destructive"
                       >
                         <Trash2 className="h-4 w-4" />

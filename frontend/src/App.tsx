@@ -8,6 +8,7 @@ import Admin from "./pages/Admin";
 import UserSelect from "./pages/UserSelect";
 import Quiz from "./pages/Quiz";
 import NotFound from "./pages/NotFound";
+import AdminAIReview from "./pages/AdminAIReview";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/quiz" element={<Quiz />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
+          <Route path="/admin/ai-review" element={<AdminAIReview />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
