@@ -61,11 +61,13 @@ const UserSelect = () => {
                     No subjects available
                   </SelectItem>
                 ) : (
-                  subjects.map((subject) => (
-                    <SelectItem key={subject} value={subject}>
-                      {subject}
-                    </SelectItem>
-                  ))
+                 subjects.map((subject) => (
+  <SelectItem key={subject} value={subject}>
+    {subject.charAt(0).toUpperCase() + subject.slice(1).toLowerCase()}
+  </SelectItem>
+))
+
+                  
                 )}
               </SelectContent>
             </Select>

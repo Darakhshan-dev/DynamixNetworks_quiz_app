@@ -3,8 +3,14 @@ const router = express.Router();
 const Question = require('../models/Question'); // Import your Mongoose model
 
 // CREATE a new question
+// CREATE a new question
 router.post('/', async (req, res) => {
   try {
+    // Normalize category to lowercase before saving
+    req.body.category = req.body.category.trim().toLowerCase();
+    // You can also normalize difficulty similarly:
+    if (req.body.difficulty) req.body.difficulty = req.body.difficulty.trim().toLowerCase();
+    
     const question = new Question(req.body);
     await question.save();
     res.status(201).json(question);
@@ -12,6 +18,7 @@ router.post('/', async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 });
+
 
 // READ: Get all questions (with filter support)
 router.get('/', async (req, res) => {
@@ -30,6 +37,10 @@ router.get('/', async (req, res) => {
 // UPDATE a question by ID
 router.put('/:id', async (req, res) => {
   try {
+    // Normalize category and difficulty before update
+    if (req.body.category) req.body.category = req.body.category.trim().toLowerCase();
+    if (req.body.difficulty) req.body.difficulty = req.body.difficulty.trim().toLowerCase();
+
     const updated = await Question.findByIdAndUpdate(req.params.id, req.body, { new: true });
     res.json(updated);
   } catch (error) {
