@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { API_BASE } from '../services/api';
+import { API_BASE } from '../lib/api';
 
 const AdminAIGenerator = () => {
   const [prompt, setPrompt] = useState("");
