@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import { API_BASE } from '../services/api';
 
 const AdminAIGenerator = () => {
   const [prompt, setPrompt] = useState("");
@@ -13,7 +14,7 @@ const AdminAIGenerator = () => {
     console.log('AI Generate button clicked!');
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5000/api/ai/generate", {
+      const res = await axios.post(`${API_BASE}/ai/generate`, {
         subject,
         difficulty,
         numQuestions,
