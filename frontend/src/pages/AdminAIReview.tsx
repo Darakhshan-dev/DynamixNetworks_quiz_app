@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
-import { API_BASE } from '../services/api';
+import { API_BASE } from '../lib/api';
 
 interface Question {
   category: string;
