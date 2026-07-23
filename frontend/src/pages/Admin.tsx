@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Plus, Trash2, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { API_BASE } from '../services/api';
 
 import AddQuestion from '../components/AddQuestion';
 import QuestionList from '../components/QuestionList';
