@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { API_BASE } from '../services/api';
+import { API_BASE } from '../lib/api';
 
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
