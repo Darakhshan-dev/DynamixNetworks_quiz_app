@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-
+import { API_BASE } from '../services/api';
 const UserSelect = () => {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<string[]>([]);
@@ -14,7 +14,7 @@ const UserSelect = () => {
   const [selectedDifficulty, setSelectedDifficulty] = useState("");
 
   useEffect(() => {
-  axios.get("http://localhost:5000/api/questions/categories")
+  axios.get(`${API_BASE}/questions/categories`)
     .then(res => setSubjects(res.data))
     .catch(err => console.error("Failed to fetch subjects:", err));
 }, []);
