@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/hooks/use-toast";
+import { API_BASE } from '../services/api';
 
 interface Question {
   category: string;
@@ -86,7 +87,7 @@ const selectedQuestions = selected.map((i) => {
 
       await Promise.all(
         selectedQuestions.map((q) =>
-          axios.post("http://localhost:5000/api/questions", q)
+          axios.post(`${API_BASE}/questions`, q)
             .catch(e => {
               console.error("POST error for:", q, e?.response?.data);
               throw e;
