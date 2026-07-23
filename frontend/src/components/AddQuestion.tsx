@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { API_BASE } from '../services/api';
 
 const AddQuestion = () => {
   const [question, setQuestion] = useState('');
@@ -24,7 +25,7 @@ const AddQuestion = () => {
         category,
         difficulty,
       };
-      const response = await axios.post('http://localhost:5000/api/questions', questionData);
+      const response = await axios.post(`${API_BASE}/questions`, questionData);
       alert('Question added successfully');
       // Clear form
       setQuestion('');
