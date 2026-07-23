@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { ArrowLeft, Trophy, RotateCcw } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from 'axios';
-import { API_BASE } from '../services/api';
+import { API_BASE } from '../lib/api';
 
 interface Question {
   id: string;
