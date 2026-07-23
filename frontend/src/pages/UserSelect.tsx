@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ArrowLeft, Play } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
-import { API_BASE } from '../services/api';
+import { API_BASE } from '../lib/api';
 const UserSelect = () => {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<string[]>([]);
