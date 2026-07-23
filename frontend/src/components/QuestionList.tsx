@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { API_BASE } from '../services/api';
 
 const QuestionList = () => {
   const [questions, setQuestions] = useState([]);
@@ -7,7 +8,7 @@ const QuestionList = () => {
   useEffect(() => {
     async function fetchQuestions() {
       try {
-        const response = await axios.get('http://localhost:5000/api/questions');
+        const response = await axios.get(`${API_BASE}/questions`);
         setQuestions(response.data);
       } catch (error) {
         console.error('Error fetching questions:', error);
