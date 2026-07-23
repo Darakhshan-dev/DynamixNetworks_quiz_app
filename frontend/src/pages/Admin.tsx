@@ -37,7 +37,7 @@ const Admin = () => {
  useEffect(() => {
   async function fetchQuestions() {
     try {
-      const response = await axios.get("http://localhost:5000/api/questions");
+      const response = await axios.get(`${API_BASE}/questions`);
       setQuestions(response.data);
     } catch (error) {
       console.error("Failed to fetch questions", error);
@@ -49,7 +49,7 @@ const Admin = () => {
 
  const saveQuestions = async () => {
   try {
-    const response = await axios.get("http://localhost:5000/api/questions");
+    const response = await axios.get(`${API_BASE}/questions`);
     setQuestions(response.data);
     localStorage.setItem("quizQuestions", JSON.stringify(response.data));
   } catch (error) {
