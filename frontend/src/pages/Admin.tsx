@@ -67,7 +67,7 @@ const [generatedQuestions, setGeneratedQuestions] = useState<Question[]>([]);
 const handleGenerate = async () => {
   setAiLoading(true);
   try {
-    const res = await axios.post("http://localhost:5000/api/ai/generate", {
+    const res = await axios.post(`${API_BASE}/ai/generate`, {
       subject: formData.category,
       difficulty: formData.difficulty,
       numQuestions: aiNumQuestions,
@@ -113,7 +113,7 @@ const handleGenerate = async () => {
 
   try {
     // Send question to backend MongoDB API
-    const response = await axios.post('http://localhost:5000/api/questions', {
+    const response = await axios.post(`${API_BASE}/questions`, {
   category: formData.category,
   difficulty: formData.difficulty,
   question: formData.question,
@@ -153,7 +153,7 @@ const handleGenerate = async () => {
  const handleDeleteQuestion = async (id: string) => {
    console.log('Deleting question with id:', id);
   try {
-    await axios.delete(`http://localhost:5000/api/questions/${id}`);
+    await axios.delete(`${API_BASE}/questions/${id}`);
 
     toast({
       title: "Question deleted",
