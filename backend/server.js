@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 });
 
 
-mongoose.connect('mongodb://localhost:27017/quizapp');
+mongoose.connect(process.env.MONGODB_URI);
 
 
 mongoose.connection.on('connected', () => {
