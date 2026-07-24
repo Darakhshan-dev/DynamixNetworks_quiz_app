@@ -54,7 +54,7 @@ useEffect(() => {
   }
 
   axios
-    .get(`http://localhost:5000/api/questions?category=${subject}&difficulty=${difficulty}`
+   .get(`${API_BASE}/questions?category=${subject}&difficulty=${difficulty}`
     )
     .then((res) => {
       const shuffledQuestions = shuffleArray(res.data).map((q: any) => {
